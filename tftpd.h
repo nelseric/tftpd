@@ -19,6 +19,10 @@ typedef struct {
     uint16_t block_num;
 } ack_p
 
-typdef 
+typedef  struct {
+    uint16_t opcode;
+    uint16_t errorcode;
+    char *errmsg;
+} error_p
 
 #endif

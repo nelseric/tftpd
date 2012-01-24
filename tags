@@ -12,3 +12,14 @@ LDLIBS	Makefile	/^LDLIBS=-lreadline$/;"	m
 OBJECTS	Makefile	/^OBJECTS=$(SOURCES:.c=.o)$/;"	m
 SOURCES	Makefile	/^SOURCES=tftpd.c$/;"	m
 TARGET	Makefile	/^TARGET=tftpd$/;"	m
+_TFTPD_H_	tftpd.h	2;"	d
+block_num	tftpd.h	/^    uint16_t block_num;$/;"	m	struct:__anon2
+block_num	tftpd.h	/^    uint16_t block_num;$/;"	m	struct:__anon3
+data	tftpd.h	/^    uint8_t data*;$/;"	m	struct:__anon2
+data_p	tftpd.h	/^} data_p;$/;"	t	typeref:struct:__anon2
+filename	tftpd.h	/^    char *filename;$/;"	m	struct:__anon1
+mode	tftpd.h	/^    char *mode;$/;"	m	struct:__anon1
+opcode	tftpd.h	/^    uint16_t opcode;$/;"	m	struct:__anon1
+opcode	tftpd.h	/^    uint16_t opcode;$/;"	m	struct:__anon2
+opcode	tftpd.h	/^    uint16_t opcode;$/;"	m	struct:__anon3
+rwrq_p	tftpd.h	/^} rwrq_p;$/;"	t	typeref:struct:__anon1
