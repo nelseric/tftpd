@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -18,7 +21,8 @@ void diep(char *s)
 int main(void)
 {
     struct sockaddr_in si_me, si_other;
-    int s, i, slen=sizeof(si_other);
+    int s, i;
+    socklen_t slen=sizeof(si_other);
     char buf[BUFLEN];
 
     if ((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP))==-1)
@@ -28,11 +32,11 @@ int main(void)
     si_me.sin_family = AF_INET;
     si_me.sin_port = htons(PORT);
     si_me.sin_addr.s_addr = htonl(INADDR_ANY);
-    if (bind(s, &si_me, sizeof(si_me))==-1)
+    if (bind(s, (struct sockaddr*) &si_me, sizeof(si_me))==-1)
         diep("bind");
 
     for (i=0; i<NPACK; i++) {
-        if (recvfrom(s, buf, BUFLEN, 0, &si_other, &slen)==-1)
+        if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr*)&si_other, &slen)==-1)
             diep("recvfrom()");
         printf("Received packet from %s:%x\nData: %s\n\n", 
                 inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port), buf);
