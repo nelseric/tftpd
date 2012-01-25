@@ -1,9 +1,9 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -ggdb 
-LDLIBS=-lreadline
+CFLAGS=-std=c99 -ggdb 
+LDLIBS=
 LDFLAGS=-ggdb
 
-SOURCES=tftpd.c
+SOURCES=tftpd.c main.c
 HEADERS=tftpd.h
 
 OBJECTS=$(SOURCES:.c=.o)
@@ -11,7 +11,7 @@ OBJECTS=$(SOURCES:.c=.o)
 TARGET=tftpd
 
 
-.PHONY : clean run package
+.PHONY : clean run package erase
 
 all: $(TARGET)
 
@@ -31,7 +31,9 @@ include .depend
 
 run: all
 	./$(TARGET) 
+erase:
+	rm $(TARGET) $(TARGET).tar.gz
 clean:
-	rm $(OBJECTS) $(TARGET) $(TARGET).tar.gz
+	rm $(OBJECTS)
 package:
 	tar -czvf $(TARGET).tar.gz $(SOURCES) $(HEADERS) Makefile

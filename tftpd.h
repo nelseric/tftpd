@@ -2,27 +2,50 @@
 #define _TFTPD_H_
 #include <stdint.h>
 
-typedef struct {
-    uint16_t opcode;
-    char *filename;
-    char *mode;
-} rwrq_p;
+//opcodes
+#define OP_RRQ   1
+#define OP_WRQ   2
+#define OP_DATA  3
+#define OP_ACK   4
+#define OP_ERROR 5
 
 typedef struct {
-    uint16_t opcode;
-    uint16_t block_num;
-    uint8_t data*;
-} data_p;
+    union {
+        uint16_t value;
+        struct {
+            uint8_t low;
+            uint8_t high;
+        } parts;
+    } opcode; 
+    union {
+        struct {
+            char * filename;
+            char * mode;
+        } rwrq;
+        struct {
+            uint16_t block_num;
+            char * data;
+        } data;
+        struct {
+            uint16_t block_num;
+        } ack;
+        struct {
+            uint16_t error_code;
+            char *errmsg;
+        } error;
+    } body;
+} tftp_packet_t;
 
-typedef struct {
-    uint16_t opcode;
-    uint16_t block_num;
-} ack_p
 
-typedef  struct {
-    uint16_t opcode;
-    uint16_t errorcode;
-    char *errmsg;
-} error_p
+tftp_packet_t * parse_buffer(char * buffer);
+
+char * prepare_packet(tftp_packet_t * packet);
+
+void print_packet(tftp_packet_t * packet);
+
+
+
+
+
 
 #endif
