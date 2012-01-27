@@ -1,6 +1,5 @@
 #ifndef _TFTPD_H_
 #define _TFTPD_H_
-#include <stdint.h>
 
 //opcodes
 #define OP_RRQ   1
@@ -10,27 +9,21 @@
 #define OP_ERROR 5
 
 typedef struct {
-    union {
-        uint16_t value;
-        struct {
-            uint8_t low;
-            uint8_t high;
-        } parts;
-    } opcode; 
-    union {
+    short opcode;
+    union body {
         struct {
             char * filename;
             char * mode;
         } rwrq;
         struct {
-            uint16_t block_num;
+            short block_num;
             char * data;
         } data;
         struct {
-            uint16_t block_num;
+            short block_num;
         } ack;
         struct {
-            uint16_t error_code;
+            short rror_code;
             char *errmsg;
         } error;
     } body;
@@ -43,7 +36,7 @@ char * prepare_packet(tftp_packet_t * packet);
 
 void print_packet(tftp_packet_t * packet);
 
-
+void packet_free(tftp_packet_t *packet);
 
 
 
