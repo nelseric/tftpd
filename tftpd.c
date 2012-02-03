@@ -3,7 +3,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-tftp_packet_t * parse_buffer(char * buffer){
+tftp_packet_t * parse_buffer(char * buffer, ssize_t length){
     tftp_packet_t * packet = malloc(sizeof(tftp_packet_t));
 
     packet->opcode = ntohs(*((uint16_t*) buffer));
