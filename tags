@@ -4,43 +4,52 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-BUFLEN	main.c	8;"	d	file:
+BUFLEN	main.c	13;"	d	file:
+BUFSIZE	new.c	4;"	d	file:
 CC	Makefile	/^CC=gcc$/;"	m
-CFLAGS	Makefile	/^CFLAGS=-std=c99 -ggdb $/;"	m
-HEADERS	Makefile	/^HEADERS=tftpd.h$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-std=c99 -ggdb -Wall$/;"	m
 LDFLAGS	Makefile	/^LDFLAGS=-ggdb$/;"	m
 LDLIBS	Makefile	/^LDLIBS=$/;"	m
-NPACK	main.c	9;"	d	file:
+NPACK	main.c	14;"	d	file:
 OBJECTS	Makefile	/^OBJECTS=$(SOURCES:.c=.o)$/;"	m
-OP_ACK	tftpd.h	8;"	d
-OP_DATA	tftpd.h	7;"	d
-OP_ERROR	tftpd.h	9;"	d
-OP_RRQ	tftpd.h	5;"	d
-OP_WRQ	tftpd.h	6;"	d
-PORT	main.c	10;"	d	file:
-SOURCES	Makefile	/^SOURCES=tftpd.c main.c$/;"	m
+OP_ACK	tftp.h	10;"	d
+OP_DATA	tftp.h	9;"	d
+OP_ERROR	tftp.h	11;"	d
+OP_RRQ	tftp.h	7;"	d
+OP_WRQ	tftp.h	8;"	d
+PORT	main.c	15;"	d	file:
+SOURCES	Makefile	/^SOURCES=tftp.c tftpd.c$/;"	m
 TARGET	Makefile	/^TARGET=tftpd$/;"	m
+TFTP_BUFLEN	tftp.h	13;"	d
+TFTP_LISTEN_PORT	tftp.h	14;"	d
 _TFTPD_H_	tftpd.h	2;"	d
-ack	tftpd.h	/^        } ack;$/;"	m	union:__anon1::__anon4	typeref:struct:__anon1::__anon4::__anon7
-block_num	tftpd.h	/^            uint16_t block_num;$/;"	m	struct:__anon1::__anon4::__anon6
-block_num	tftpd.h	/^            uint16_t block_num;$/;"	m	struct:__anon1::__anon4::__anon7
-data	tftpd.h	/^            char * data;$/;"	m	struct:__anon1::__anon4::__anon6
-data	tftpd.h	/^        } data;$/;"	m	union:__anon1::__anon4	typeref:struct:__anon1::__anon4::__anon6
+_TFTP_H_	tftp.h	2;"	d
+ack	tftp.h	/^        } ack;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon4
+block_num	tftp.h	/^            short block_num;$/;"	m	struct:__anon1::body::__anon3
+block_num	tftp.h	/^            short block_num;$/;"	m	struct:__anon1::body::__anon4
+body	tftp.h	/^    union body {$/;"	u	struct:__anon1
+body	tftp.h	/^    } body;$/;"	m	struct:__anon1	typeref:union:__anon1::body
+data	tftp.h	/^            char * data;$/;"	m	struct:__anon1::body::__anon3
+data	tftp.h	/^        } data;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon3
 diep	main.c	/^void diep(char *s)$/;"	f
-errmsg	tftpd.h	/^            char *errmsg;$/;"	m	struct:__anon1::__anon4::__anon8
-error	tftpd.h	/^        } error;$/;"	m	union:__anon1::__anon4	typeref:struct:__anon1::__anon4::__anon8
-error_code	tftpd.h	/^            uint16_t error_code;$/;"	m	struct:__anon1::__anon4::__anon8
-filename	tftpd.h	/^            char * filename;$/;"	m	struct:__anon1::__anon4::__anon5
-high	tftpd.h	/^            uint8_t high;$/;"	m	struct:__anon1::__anon2::__anon3
-low	tftpd.h	/^            uint8_t low;$/;"	m	struct:__anon1::__anon2::__anon3
+diep	tftpd.c	/^void diep(char *s)$/;"	f
+errmsg	tftp.h	/^            char *errmsg;$/;"	m	struct:__anon1::body::__anon5
+error	tftp.h	/^        } error;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon5
+error_code	tftp.h	/^            short error_code;$/;"	m	struct:__anon1::body::__anon5
+filename	tftp.h	/^            char * filename;$/;"	m	struct:__anon1::body::__anon2
+length	tftp.h	/^            size_t length;$/;"	m	struct:__anon1::body::__anon3
 main	main.c	/^int main(void)$/;"	f
-mode	tftpd.h	/^            char * mode;$/;"	m	struct:__anon1::__anon4::__anon5
-opcode	tftpd.h	/^    } opcode; $/;"	m	struct:__anon1	typeref:union:__anon1::__anon2
-packet	tftpd.h	/^    } packet;$/;"	m	struct:__anon1	typeref:union:__anon1::__anon4
-parse_buffer	tftpd.c	/^tftp_packet_t * parse_buffer(char * buffer){$/;"	f
-parts	tftpd.h	/^        } parts;$/;"	m	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon3
-prepare_packet	tftpd.c	/^char * prepare_packet(tftp_packet_t *packet){$/;"	f
-print_packet	tftpd.c	/^void print_packet(tftp_packet_t * packet){$/;"	f
-rwrq	tftpd.h	/^        } rwrq;$/;"	m	union:__anon1::__anon4	typeref:struct:__anon1::__anon4::__anon5
-tftp_packet_t	tftpd.h	/^} tftp_packet_t;$/;"	t	typeref:struct:__anon1
-value	tftpd.h	/^        uint16_t value;$/;"	m	union:__anon1::__anon2
+main	new.c	/^int main(int argc, char *argv[]){$/;"	f
+main	tftpd.c	/^int main(int argc, char *argv[]){$/;"	f
+mode	tftp.h	/^            char * mode;$/;"	m	struct:__anon1::body::__anon2
+opcode	tftp.h	/^    short opcode;$/;"	m	struct:__anon1
+packet_free	tftp.c	/^void packet_free(tftp_packet_t *packet){$/;"	f
+parse_buffer	tftp.c	/^tftp_packet_t * parse_buffer(char * buffer, ssize_t length){$/;"	f
+prepare_packet	tftp.c	/^size_t prepare_packet(tftp_packet_t *packet, char **rbuf){$/;"	f
+print_packet	tftp.c	/^void print_packet(tftp_packet_t * packet)$/;"	f
+receive_file	tftpd.c	/^void receive_file(tftp_packet_t * request, int sock, struct sockaddr_in *client){$/;"	f
+rwrq	tftp.h	/^        } rwrq;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon2
+send_ack	tftpd.c	/^void send_ack(int block, int sock, struct sockaddr_in *dst_addr){$/;"	f
+send_error	tftpd.c	/^void send_error(short code, char * message, int sock, struct sockaddr_in *dst_addr){$/;"	f
+send_file	tftpd.c	/^void send_file(tftp_packet_t * request, int sock, struct sockaddr_in *client){$/;"	f
+tftp_packet_t	tftp.h	/^} tftp_packet_t;$/;"	t	typeref:struct:__anon1

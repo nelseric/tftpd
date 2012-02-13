@@ -3,8 +3,7 @@ CFLAGS=-std=c99 -ggdb -Wall
 LDLIBS=
 LDFLAGS=-ggdb
 
-SOURCES=tftpd.c main.c
-HEADERS=tftpd.h
+SOURCES=tftp.c tftpd.c
 
 OBJECTS=$(SOURCES:.c=.o)
 
@@ -25,6 +24,7 @@ $(TARGET): $(OBJECTS)
 
 
 depend: $(SOURCES)
+	ctags -R
 	rm -f ./.depend
 	$(CC) $(CFLAGS) -MM $^>>./.depend;
 include .depend
@@ -35,5 +35,3 @@ erase:
 	rm $(TARGET) $(TARGET).tar.gz
 clean:
 	rm $(OBJECTS)
-package:
-	tar -czvf $(TARGET).tar.gz $(SOURCES) $(HEADERS) Makefile
