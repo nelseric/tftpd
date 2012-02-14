@@ -1,7 +1,8 @@
 CC=gcc
-CFLAGS=-std=c99 -ggdb -Wall
+DBGFLAG=-ggdb
+CFLAGS=-std=c99 $(DBGFLAG) -Wall
 LDLIBS=
-LDFLAGS=-ggdb
+LDFLAGS=$(DBGFLAG) -Os
 
 SOURCES=tftp.c tftpd.c
 
@@ -29,9 +30,7 @@ depend: $(SOURCES)
 	$(CC) $(CFLAGS) -MM $^>>./.depend;
 include .depend
 
-run: all
-	./$(TARGET) 
 erase:
-	rm $(TARGET) $(TARGET).tar.gz
+	rm $(TARGET)
 clean:
 	rm $(OBJECTS)

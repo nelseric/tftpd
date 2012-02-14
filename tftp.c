@@ -6,7 +6,7 @@
 #include "tftp.h"
 
 
-tftp_packet_t * parse_buffer(char * buffer, ssize_t length){
+tftp_packet_t * parse_buffer(char * buffer, size_t length){
     tftp_packet_t * packet = malloc(sizeof(tftp_packet_t));
 
     packet->opcode = ntohs(*((uint16_t*) buffer));
@@ -16,6 +16,7 @@ tftp_packet_t * parse_buffer(char * buffer, ssize_t length){
         case OP_RRQ:
         case OP_WRQ:
             {
+                packet->body.rwrq.blksize = 512;
                 char * fname = buffer + 2;
                 char * mode = fname + strlen(fname) + 1;
                 packet->body.rwrq.filename = malloc(sizeof(char) * strlen(fname)+1);
@@ -55,7 +56,7 @@ size_t prepare_packet(tftp_packet_t *packet, char **rbuf){
             {
                 size_t f_len = strlen(packet->body.rwrq.filename);
                 size_t m_len = strlen(packet->body.rwrq.mode);
-                buf = malloc(bufsize = 4 + f_len + m_len);
+                char * buf = malloc(bufsize = 4 + f_len + m_len);
                 *(uint16_t*)(buf +0) = htons(packet->opcode);
                 strcpy(buf+2, packet->body.rwrq.filename);
                 strcpy(buf+2 + f_len, packet->body.rwrq.mode);
@@ -100,7 +101,7 @@ void packet_free(tftp_packet_t *packet){
             free(packet->body.data.data);
             break;
         case OP_ERROR:
-            free(packet->body.error.errmsg);
+            // free(packet->body.error.errmsg);
             break;
     }
     free(packet);

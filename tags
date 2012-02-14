@@ -4,52 +4,60 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-BUFLEN	main.c	13;"	d	file:
-BUFSIZE	new.c	4;"	d	file:
 CC	Makefile	/^CC=gcc$/;"	m
-CFLAGS	Makefile	/^CFLAGS=-std=c99 -ggdb -Wall$/;"	m
-LDFLAGS	Makefile	/^LDFLAGS=-ggdb$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-std=c99 $(DBGFLAG) -Wall$/;"	m
+DBGFLAG	Makefile	/^DBGFLAG=-ggdb$/;"	m
+E_ACCESS	tftp.h	19;"	d
+E_DISK	tftp.h	20;"	d
+E_EXISTS	tftp.h	23;"	d
+E_NOFILE	tftp.h	18;"	d
+E_OP	tftp.h	21;"	d
+E_TIP	tftp.h	22;"	d
+E_UNDEF	tftp.h	17;"	d
+E_USER	tftp.h	24;"	d
+LDFLAGS	Makefile	/^LDFLAGS=$(DBGFLAG) -Os$/;"	m
 LDLIBS	Makefile	/^LDLIBS=$/;"	m
-NPACK	main.c	14;"	d	file:
 OBJECTS	Makefile	/^OBJECTS=$(SOURCES:.c=.o)$/;"	m
 OP_ACK	tftp.h	10;"	d
 OP_DATA	tftp.h	9;"	d
 OP_ERROR	tftp.h	11;"	d
+OP_OACK	tftp.h	12;"	d
 OP_RRQ	tftp.h	7;"	d
 OP_WRQ	tftp.h	8;"	d
-PORT	main.c	15;"	d	file:
 SOURCES	Makefile	/^SOURCES=tftp.c tftpd.c$/;"	m
 TARGET	Makefile	/^TARGET=tftpd$/;"	m
-TFTP_BUFLEN	tftp.h	13;"	d
-TFTP_LISTEN_PORT	tftp.h	14;"	d
+TFTP_BUFLEN	tftp.h	14;"	d
+TFTP_LISTEN_PORT	tftp.h	15;"	d
 _TFTPD_H_	tftpd.h	2;"	d
 _TFTP_H_	tftp.h	2;"	d
+_XOPEN_SOURCE	tftpd.c	1;"	d	file:
 ack	tftp.h	/^        } ack;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon4
+atona	tftpd.c	/^void atona(char **rbuf, size_t *buflen){$/;"	f
+blksize	tftp.h	/^            size_t blksize;$/;"	m	struct:__anon1::body::__anon2
 block_num	tftp.h	/^            short block_num;$/;"	m	struct:__anon1::body::__anon3
 block_num	tftp.h	/^            short block_num;$/;"	m	struct:__anon1::body::__anon4
 body	tftp.h	/^    union body {$/;"	u	struct:__anon1
 body	tftp.h	/^    } body;$/;"	m	struct:__anon1	typeref:union:__anon1::body
 data	tftp.h	/^            char * data;$/;"	m	struct:__anon1::body::__anon3
 data	tftp.h	/^        } data;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon3
-diep	main.c	/^void diep(char *s)$/;"	f
 diep	tftpd.c	/^void diep(char *s)$/;"	f
 errmsg	tftp.h	/^            char *errmsg;$/;"	m	struct:__anon1::body::__anon5
 error	tftp.h	/^        } error;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon5
 error_code	tftp.h	/^            short error_code;$/;"	m	struct:__anon1::body::__anon5
 filename	tftp.h	/^            char * filename;$/;"	m	struct:__anon1::body::__anon2
+jail	tftpd.c	/^void jail(){$/;"	f
 length	tftp.h	/^            size_t length;$/;"	m	struct:__anon1::body::__anon3
-main	main.c	/^int main(void)$/;"	f
-main	new.c	/^int main(int argc, char *argv[]){$/;"	f
 main	tftpd.c	/^int main(int argc, char *argv[]){$/;"	f
 mode	tftp.h	/^            char * mode;$/;"	m	struct:__anon1::body::__anon2
+natoa	tftpd.c	/^void natoa(char ** rbuf, size_t *buflen){$/;"	f
 opcode	tftp.h	/^    short opcode;$/;"	m	struct:__anon1
 packet_free	tftp.c	/^void packet_free(tftp_packet_t *packet){$/;"	f
-parse_buffer	tftp.c	/^tftp_packet_t * parse_buffer(char * buffer, ssize_t length){$/;"	f
+parse_buffer	tftp.c	/^tftp_packet_t * parse_buffer(char * buffer, size_t length){$/;"	f
 prepare_packet	tftp.c	/^size_t prepare_packet(tftp_packet_t *packet, char **rbuf){$/;"	f
 print_packet	tftp.c	/^void print_packet(tftp_packet_t * packet)$/;"	f
-receive_file	tftpd.c	/^void receive_file(tftp_packet_t * request, int sock, struct sockaddr_in *client){$/;"	f
+receive_file	tftpd.c	/^void receive_file(tftp_packet_t * request, int sock){$/;"	f
 rwrq	tftp.h	/^        } rwrq;$/;"	m	union:__anon1::body	typeref:struct:__anon1::body::__anon2
-send_ack	tftpd.c	/^void send_ack(int block, int sock, struct sockaddr_in *dst_addr){$/;"	f
-send_error	tftpd.c	/^void send_error(short code, char * message, int sock, struct sockaddr_in *dst_addr){$/;"	f
-send_file	tftpd.c	/^void send_file(tftp_packet_t * request, int sock, struct sockaddr_in *client){$/;"	f
+send_ack	tftpd.c	/^void send_ack(int block, int sock){$/;"	f
+send_error	tftpd.c	/^void send_error(short code, char * message, int sock){$/;"	f
+send_file	tftpd.c	/^void send_file(tftp_packet_t * request, int sock){$/;"	f
 tftp_packet_t	tftp.h	/^} tftp_packet_t;$/;"	t	typeref:struct:__anon1

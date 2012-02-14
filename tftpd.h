@@ -4,13 +4,16 @@
 #include <netinet/in.h>
 
 
-void send_ack(int block, int sock, struct sockaddr_in *dst_addr);
+void send_ack(int block, int sock);
 
-void send_file(tftp_packet_t * request, int sock, struct sockaddr_in *dst_addr);
+void send_file(tftp_packet_t * request, int sock);
 
-void receive_file(tftp_packet_t * request, int sock, struct sockaddr_in *dst_addr);
+void receive_file(tftp_packet_t * request, int sock);
 
-void send_error(short code, char * message, int sock, struct sockaddr_in *dst_addr);
+void send_error(short code, char * message, int sock);
 
+void atona(char **buf, size_t *buflen);
+
+void natoa(char **buf, size_t *buflen);
 
 #endif
