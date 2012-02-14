@@ -75,6 +75,11 @@ int main(int argc, char *argv[]){
             handler_addr.sin_port = htons(0);
             handler_addr.sin_addr.s_addr = INADDR_ANY;
 
+            struct timeval tv;
+            tv.tv_sec = 5;
+            tv.tv_usec = 0;
+
+
             if((handler_sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
                 diep("handler socket");
 
@@ -83,6 +88,9 @@ int main(int argc, char *argv[]){
 
             if(connect(handler_sock, (struct sockaddr *) &client_addr, sizeof(client_addr)) == -1)
                 diep("connect");
+
+            if (setsockopt(handler_sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,  sizeof tv))
+                diep("setsockopt");
 
             printf("handler connection set up\n"); 
 
@@ -196,6 +204,7 @@ void send_file(tftp_packet_t * request, int sock){
         size_t sbuf_size = prepare_packet(&data_p, &sbuf);
 
         char bsent = 0;
+        int retries = 0;
         while(bsent == 0){
             printf("Sent Block %d\n", block);
             send(sock, sbuf, sbuf_size, 0);
@@ -203,7 +212,17 @@ void send_file(tftp_packet_t * request, int sock){
 
             char ack_buf[10];
 
-            size_t recvd = recv(sock, ack_buf, 10, 0); // TODO: Add a timeout here, as well as an overall timeout
+            size_t recvd = recv(sock, ack_buf, 10, 0);
+
+            if(recvd == -1 && errno == EAGAIN){
+                if(retries >= 8){
+                    puts("timeout exit");
+                    exit(EXIT_FAILURE);
+                }
+                printf("retrying %d more times.\n", 8 -retries);
+                retries++;
+                continue;
+            }
 
             tftp_packet_t *ack = parse_buffer(ack_buf, recvd);
             if(ack->opcode == OP_ACK && ack->body.ack.block_num == block){
@@ -246,31 +265,26 @@ void receive_file(tftp_packet_t * request, int sock){
     }
 
 
-    
+
     int block = 1;
 
     char *rxbuf = malloc(bsize + 4);
     size_t recvd = 0;
     tftp_packet_t *packet;
-    // fd_set rfds;    
-    // FD_ZERO(&rfds);
-    // FD_SET(sock, &rfds);
-    // struct timeval timeout;
+    int retries = 0;
     send_ack(0, sock); //start sendin'
     do {
-        
-        // timeout.tv_sec = 5; //TODO Add timeout option
-        // timeout.tv_usec = 0;
-        // int sval = select(1, &rfds, NULL, NULL, &timeout);
-        // if(sval == -1)
-        //     diep("wrq select");
-        // if(!FD_ISSET(sock, &rfds)){
-        //     puts("Timout");
-        //     exit(EXIT_FAILURE);
-        // }
-
         recvd = recv(sock, rxbuf, bsize+4, 0);
-        
+        if(recvd == -1 && errno == EAGAIN){
+            if(retries >= 8){
+                puts("timeout exit");
+                exit(EXIT_FAILURE);
+            }
+            printf("retrying %d more times.\n", 8 -retries);
+            retries++;
+            continue;
+        }
+
         packet = parse_buffer(rxbuf, recvd);
         if(packet->opcode != OP_DATA)
             send_error(E_OP, "Waiting for data", sock);

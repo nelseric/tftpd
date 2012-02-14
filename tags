@@ -6,7 +6,7 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 CC	Makefile	/^CC=gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS=-std=c99 $(DBGFLAG) -Wall$/;"	m
-DBGFLAG	Makefile	/^DBGFLAG=-ggdb -DNO_FORK$/;"	m
+DBGFLAG	Makefile	/^DBGFLAG=-ggdb $/;"	m
 E_ACCESS	tftp.h	19;"	d
 E_DISK	tftp.h	20;"	d
 E_EXISTS	tftp.h	23;"	d
