@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <dirent.h>
 
@@ -59,12 +60,13 @@ int main(int argc, char *argv[]){
                 (int) recvd, 
                 inet_ntoa(client_addr.sin_addr),
                 ntohs(client_addr.sin_port));
-
+#ifndef NO_FORK
         pid_t f = fork();
         if(f == -1)
             diep("handler fork");
 
         if(f == 0) {
+#endif
             printf("child of %d\n", getppid());
             int handler_sock;
             struct sockaddr_in handler_addr;
@@ -90,6 +92,7 @@ int main(int argc, char *argv[]){
             if(strcasecmp(mode, "netascii") != 0 && strcasecmp(mode, "octet") != 0){
                 printf("%s==netascii?%d\n%s==octet?%d\n", mode, strcasecmp(mode, "netascii"), mode, strcasecmp(mode, "octet"));
                 send_error(E_OP, "invalid mode", handler_sock);
+                exit(EXIT_FAILURE);
             }
 
             print_packet(request);
@@ -114,9 +117,11 @@ int main(int argc, char *argv[]){
             }
             printf("request handled: %d\n", getpid());
             exit(EXIT_SUCCESS);
+#ifndef NO_FORK
         } else {
             printf("Parent returning to listen: %d\n", getpid());
         }
+#endif
     }
 }
 
@@ -223,6 +228,8 @@ void receive_file(tftp_packet_t * request, int sock){
     //check if file exists
     if(access(fname, F_OK) == 0){
         send_error(6, "File alread exists.", sock);
+        puts("Exiting: File Exists");
+        exit(EXIT_FAILURE);
     }
     FILE *dstfile = fopen(fname, "w+");
 
@@ -230,6 +237,7 @@ void receive_file(tftp_packet_t * request, int sock){
         switch(errno){
             case EACCES:
                 send_error(E_ACCESS, strerror(errno), sock);
+                puts("Exiting: Access");
                 exit(EXIT_FAILURE);
             default:
                 send_error(100 + errno, strerror(errno), sock);
@@ -239,14 +247,28 @@ void receive_file(tftp_packet_t * request, int sock){
 
 
     
-    send_ack(0, sock); //start sendin'
     int block = 1;
 
     char *rxbuf = malloc(bsize + 4);
     size_t recvd = 0;
     tftp_packet_t *packet;
+    // fd_set rfds;    
+    // FD_ZERO(&rfds);
+    // FD_SET(sock, &rfds);
+    // struct timeval timeout;
+    send_ack(0, sock); //start sendin'
     do {
-        //TODO: Insert timeout stuff here
+        
+        // timeout.tv_sec = 5; //TODO Add timeout option
+        // timeout.tv_usec = 0;
+        // int sval = select(1, &rfds, NULL, NULL, &timeout);
+        // if(sval == -1)
+        //     diep("wrq select");
+        // if(!FD_ISSET(sock, &rfds)){
+        //     puts("Timout");
+        //     exit(EXIT_FAILURE);
+        // }
+
         recvd = recv(sock, rxbuf, bsize+4, 0);
         
         packet = parse_buffer(rxbuf, recvd);
@@ -254,9 +276,15 @@ void receive_file(tftp_packet_t * request, int sock){
             send_error(E_OP, "Waiting for data", sock);
         if(packet->body.data.block_num == block){
             send_ack(block, sock);
-            puts("recvd packet");
+            char * data = packet->body.data.data;
+            size_t length = packet->body.data.length;
+            if(strcasecmp(request->body.rwrq.mode, "netascii") == 0){
+                puts("netascii translate");
+                natoa(&data, &length);
+            }
+            fwrite(data, 1, length, dstfile);
         }
-
+        block++;
     } while (packet->body.data.length == bsize);
 }
 
@@ -318,4 +346,7 @@ void natoa(char ** rbuf, size_t *buflen){
             buf_i++;
         temp[res_i++] = buf[buf_i++];
     }
+    *rbuf = temp;
+    free(buf);
+    *buflen = res_i;
 }

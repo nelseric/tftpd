@@ -1,5 +1,5 @@
 CC=gcc
-DBGFLAG=-ggdb
+DBGFLAG=-ggdb -DNO_FORK
 CFLAGS=-std=c99 $(DBGFLAG) -Wall
 LDLIBS=
 LDFLAGS=$(DBGFLAG) -Os
