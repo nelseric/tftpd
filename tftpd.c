@@ -293,7 +293,6 @@ void receive_file(tftp_packet_t * request, int sock){
             char * data = packet->body.data.data;
             size_t length = packet->body.data.length;
             if(strcasecmp(request->body.rwrq.mode, "netascii") == 0){
-                puts("netascii translate");
                 natoa(&data, &length);
             }
             fwrite(data, 1, length, dstfile);
